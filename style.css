@@ -229,3 +229,17 @@ select {
   gap: 10px;
   margin-top: 18px;
 }
+
+img {
+  -webkit-user-drag: none;
+  pointer-events: none;
+}
+
+#rouletteArea {
+  pointer-events: auto;
+  cursor: grab;
+}
+
+#rouletteArea:active {
+  cursor: grabbing;
+}
