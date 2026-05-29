@@ -1,0 +1,231 @@
+* {
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+  user-select: none;
+}
+
+html,
+body {
+  margin: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background: #000;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", sans-serif;
+}
+
+button,
+input,
+select {
+  font: inherit;
+}
+
+#app {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+}
+
+#background {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+#rouletteScreen {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+#rouletteArea {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: min(78vw, 78vh);
+  height: min(78vw, 78vh);
+  transform: translate(-50%, -50%);
+}
+
+#wheel {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  transform: rotate(0deg);
+  will-change: transform;
+  touch-action: none;
+}
+
+#pointer {
+  position: absolute;
+  left: 50%;
+  top: -4%;
+  width: 16%;
+  transform: translateX(-50%);
+  z-index: 4;
+  pointer-events: none;
+}
+
+#centerButton {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 24%;
+  transform: translate(-50%, -50%);
+  z-index: 5;
+  pointer-events: none;
+}
+
+#gestureGuide {
+  position: absolute;
+  left: 50%;
+  bottom: 4vh;
+  transform: translateX(-50%);
+  color: white;
+  font-size: clamp(18px, 2vw, 34px);
+  text-shadow: 0 3px 10px rgba(0, 0, 0, 0.8);
+}
+
+#winnerLog {
+  position: absolute;
+  right: 3vw;
+  top: 3vh;
+  width: 300px;
+  max-width: 32vw;
+  padding: 16px;
+  color: #fff;
+  background: rgba(0, 0, 0, 0.45);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  border-radius: 18px;
+  backdrop-filter: blur(8px);
+  z-index: 3;
+}
+
+.logTitle {
+  font-weight: 800;
+  margin-bottom: 8px;
+}
+
+#winnerLogList {
+  margin: 0;
+  padding-left: 18px;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+#adminHotspot {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 80px;
+  height: 80px;
+  z-index: 20;
+}
+
+.modal {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  display: grid;
+  place-items: center;
+  background: rgba(0, 0, 0, 0.72);
+}
+
+.hidden {
+  display: none;
+}
+
+.modalBox {
+  width: min(520px, 86vw);
+  padding: 36px;
+  text-align: center;
+  color: #fff;
+  background: rgba(20, 20, 20, 0.95);
+  border: 2px solid rgba(255, 255, 255, 0.24);
+  border-radius: 28px;
+}
+
+.modalBox h1 {
+  margin: 0 0 16px;
+  font-size: 48px;
+}
+
+.modalBox p {
+  margin: 0 0 28px;
+  font-size: 32px;
+  font-weight: 800;
+}
+
+.modalBox button,
+.adminActions button {
+  padding: 12px 20px;
+  border: 0;
+  border-radius: 12px;
+  background: #fff;
+  color: #000;
+  font-weight: 800;
+}
+
+.adminBox {
+  width: min(980px, 92vw);
+  max-height: 88vh;
+  overflow: auto;
+  padding: 24px;
+  color: #fff;
+  background: #151515;
+  border-radius: 24px;
+}
+
+.adminGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+  margin-bottom: 20px;
+}
+
+.adminGrid label,
+.prizeRow label {
+  display: grid;
+  gap: 6px;
+  font-size: 13px;
+}
+
+.adminBox input,
+.adminBox select {
+  width: 100%;
+  padding: 10px;
+  border: 0;
+  border-radius: 10px;
+}
+
+.prizeRow {
+  display: grid;
+  grid-template-columns: 1.2fr 0.7fr 0.7fr 0.7fr 0.7fr;
+  gap: 10px;
+  margin-bottom: 10px;
+  padding: 12px;
+  background: #242424;
+  border-radius: 14px;
+}
+
+#adminLog {
+  max-height: 160px;
+  overflow: auto;
+  padding: 12px;
+  background: #242424;
+  border-radius: 14px;
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.adminActions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 18px;
+}

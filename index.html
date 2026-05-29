@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>Fair Roulette</title>
+
+  <link rel="manifest" href="./manifest.json" />
+  <meta name="theme-color" content="#000000" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-title" content="Fair Roulette" />
+
+  <link rel="stylesheet" href="./style.css" />
+</head>
+<body>
+  <main id="app">
+    <div id="adminHotspot"></div>
+
+    <section id="rouletteScreen">
+      <img id="background" src="./images/background.png" alt="" />
+
+      <div id="winnerLog">
+        <div class="logTitle">3등 이상 당첨</div>
+        <ul id="winnerLogList"></ul>
+      </div>
+
+      <div id="rouletteArea">
+        <img id="wheel" src="./images/wheel.png" alt="roulette wheel" />
+        <img id="pointer" src="./images/pointer.png" alt="pointer" />
+        <img id="centerButton" src="./images/button.png" alt="spin button" />
+      </div>
+
+      <div id="gestureGuide">룰렛을 손가락으로 휙 밀어주세요</div>
+    </section>
+
+    <div id="resultModal" class="modal hidden">
+      <div class="modalBox">
+        <h1 id="resultTitle">당첨!</h1>
+        <p id="resultPrize"></p>
+        <button id="closeResultBtn">확인</button>
+      </div>
+    </div>
+
+    <div id="adminModal" class="modal hidden">
+      <div class="adminBox">
+        <h2>관리자</h2>
+
+        <div class="adminGrid">
+          <label>
+            천장 사용
+            <select id="pityEnabled">
+              <option value="true">사용</option>
+              <option value="false">미사용</option>
+            </select>
+          </label>
+
+          <label>
+            천장 횟수
+            <input id="pityMaxFailCount" type="number" min="1" />
+          </label>
+
+          <label>
+            보장 등수
+            <input id="pityGuaranteedRank" type="number" min="1" />
+          </label>
+        </div>
+
+        <h3>상품 설정</h3>
+        <div id="prizeEditor"></div>
+
+        <h3>최근 로그</h3>
+        <div id="adminLog"></div>
+
+        <div class="adminActions">
+          <button id="saveAdminBtn">저장</button>
+          <button id="resetLogsBtn">로그 초기화</button>
+          <button id="resetAllBtn">전체 초기화</button>
+          <button id="closeAdminBtn">닫기</button>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <script src="./script.js"></script>
+  <script>
+    if ("serviceWorker" in navigator) {
+      window.addEventListener("load", () => {
+        navigator.serviceWorker.register("./sw.js");
+      });
+    }
+  </script>
+</body>
+</html>
