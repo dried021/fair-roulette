@@ -2,11 +2,11 @@ const STORAGE_KEY = "fair-roulette-state-v1";
 
 const defaultState = {
   prizes: [
-    { id: 1, name: "1등 상품", rank: 1, weight: 1, stock: 1, angle: 0 },
-    { id: 2, name: "2등 상품", rank: 2, weight: 4, stock: 3, angle: 60 },
-    { id: 3, name: "3등 상품", rank: 3, weight: 15, stock: 10, angle: 120 },
-    { id: 4, name: "참가상", rank: 4, weight: 40, stock: 999, angle: 180 },
-    { id: 5, name: "꽝", rank: 99, weight: 40, stock: 9999, angle: 240 }
+    { id: 1, name: "1등 상품", rank: 1, weight: 30, stock: 999, angle: -90 },
+    { id: 2, name: "2등 상품", rank: 2, weight: 30, stock: 999, angle: -52.5 },
+    { id: 3, name: "3등 상품", rank: 3, weight: 30, stock: 999, angle: 2.5 },
+    { id: 4, name: "4등 상품", rank: 4, weight: 30, stock: 999, angle: 80 },
+    { id: 5, name: "5등 상품", rank: 5, weight: 30, stock: 999, angle: 190 }
   ],
   pity: {
     enabled: true,
@@ -101,6 +101,7 @@ function bindGesture() {
   });
 }
 
+
 function spinRoulette() {
   if (isSpinning) return;
 
@@ -113,10 +114,16 @@ function spinRoulette() {
   isSpinning = true;
 
   const fullSpins = randomInt(6, 9) * 360;
-  const targetAngle = 360 - prize.angle;
-  const jitter = randomInt(-10, 10);
+  // 포인터가 12시 방향이므로 기준각은 -90도
+  const targetAngle = normalizeAngle(-90 - prize.angle);
+  // 현재 회전값에서 목표 각도까지 가는 차이만 더해야 함
+  const currentAngle = normalizeAngle(state.currentRotation);
+  const deltaAngle = normalizeAngle(targetAngle - currentAngle);
 
-  const nextRotation = state.currentRotation + fullSpins + targetAngle + jitter;
+  // 경계 넘지 않게 약하게 흔들림
+  const jitter = randomInt(-5, 5);
+
+  const nextRotation = state.currentRotation + fullSpins + deltaAngle + jitter;
 
   wheel.style.transition = "transform 4.2s cubic-bezier(0.12, 0.72, 0.08, 1)";
   wheel.style.transform = `rotate(${nextRotation}deg)`;
@@ -316,6 +323,11 @@ function saveAdminFromInputs() {
 function randomInt(min, max) {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 }
+
+function normalizeAngle(angle) {
+  return ((angle % 360) + 360) % 360;
+}
+
 
 function escapeHtml(value) {
   return String(value)
