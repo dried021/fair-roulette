@@ -1,4 +1,4 @@
-const CACHE_NAME = "fair-roulette-v10";
+const CACHE_NAME = "fair-roulette-v18";
 
 const FILES_TO_CACHE = [
   "./",
@@ -11,7 +11,8 @@ const FILES_TO_CACHE = [
   "./images/pointer.png",
   "./images/button.png",
   "./images/icon-192.png",
-  "./images/icon-512.png"
+  "./images/icon-512.png",
+  "./gif/celebrate.gif"
 ];
 
 self.addEventListener("install", (event) => {

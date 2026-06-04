@@ -107,8 +107,9 @@ select {
   position: absolute;
   right: 3vw;
   top: 3vh;
-  width: 380px;
-  max-width: 38vw;
+  width: fit-content;
+  min-width: 340px;
+  max-width: min(88vw, 520px);
   padding: 22px 24px;
   color: var(--brown-deep);
   background: rgba(255, 255, 255, 0.74);
@@ -121,10 +122,13 @@ select {
 
 #winnerLogList {
   margin: 0;
-  padding-left: 22px;
+  padding-left: 0;
+  list-style: none;
+  text-align: center;
   font-size: 17px;
   line-height: 1.65;
   font-weight: 700;
+  white-space: nowrap;
 }
 
 #adminHotspot {
@@ -155,8 +159,8 @@ select {
 }
 
 .modalBox {
-  width: min(520px, 86vw);
-  padding: 36px;
+  width: min(680px, 90vw);
+  padding: 44px;
   text-align: center;
   color: var(--brown-deep);
   background: rgba(255, 253, 244, 0.96);
@@ -172,6 +176,53 @@ select {
   transform: translateY(14px) scale(0.98);
 }
 
+.celebrateOverlay {
+  position: fixed;
+  inset: 0;
+  z-index: 80;
+  display: grid;
+  place-items: center;
+  pointer-events: none;
+  opacity: 1;
+  transition: opacity 0.2s ease;
+}
+
+.celebrateOverlay.hidden {
+  opacity: 0;
+  visibility: hidden;
+}
+
+.celebrateOverlay img {
+  width: 100vw;
+  height: 100vh;
+  object-fit: cover;
+}
+
+.specialWin .modalBox {
+  animation: specialWinGlow 1s ease-out both;
+}
+
+@keyframes specialWinGlow {
+  0% {
+    box-shadow:
+      0 18px 48px var(--shadow),
+      0 0 0 rgba(255, 245, 138, 0);
+  }
+
+  35% {
+    box-shadow:
+      0 18px 48px var(--shadow),
+      0 0 38px rgba(255, 245, 138, 0.72),
+      0 0 76px rgba(244, 122, 139, 0.4);
+  }
+
+  100% {
+    box-shadow:
+      0 18px 48px var(--shadow),
+      0 0 12px rgba(255, 245, 138, 0.18);
+  }
+}
+
 .modalBox h1 {
   margin: 0 0 16px;
   font-size: 48px;
@@ -179,9 +230,12 @@ select {
 
 .modalBox p {
   margin: 0 0 28px;
-  font-size: 32px;
+  font-size: clamp(26px, 4vw, 42px);
   font-weight: 800;
   color: var(--pink-deep);
+  line-height: 1.25;
+  overflow-wrap: anywhere;
+  word-break: keep-all;
 }
 
 .modalBox button,
@@ -290,12 +344,21 @@ img {
   #winnerLog {
     right: 4vw;
     top: 2vh;
-    width: min(360px, 88vw);
+    width: fit-content;
+    min-width: min(320px, 88vw);
     max-width: 88vw;
     padding: 18px 20px;
   }
 
   #winnerLogList {
     font-size: 15px;
+  }
+
+  .modalBox {
+    padding: 34px 28px;
+  }
+
+  .modalBox p {
+    font-size: clamp(24px, 8vw, 34px);
   }
 }
