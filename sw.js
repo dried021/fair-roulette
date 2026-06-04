@@ -1,4 +1,4 @@
-const CACHE_NAME = "fair-roulette-v4";
+const CACHE_NAME = "fair-roulette-v10";
 
 const FILES_TO_CACHE = [
   "./",
@@ -7,7 +7,7 @@ const FILES_TO_CACHE = [
   "./script.js",
   "./manifest.json",
   "./images/background.png",
-  "./images/wheel2.png",
+  "./images/wheel3.png",
   "./images/pointer.png",
   "./images/button.png",
   "./images/icon-192.png",

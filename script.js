@@ -35,8 +35,6 @@ const resetLogsBtn = document.getElementById("resetLogsBtn");
 const resetAllBtn = document.getElementById("resetAllBtn");
 
 const pityEnabled = document.getElementById("pityEnabled");
-const pityMaxFailCount = document.getElementById("pityMaxFailCount");
-const pityGuaranteedRank = document.getElementById("pityGuaranteedRank");
 const prizeEditor = document.getElementById("prizeEditor");
 const winnerLogList = document.getElementById("winnerLogList");
 const adminLog = document.getElementById("adminLog");
@@ -51,7 +49,7 @@ let hotspotTimer = null;
 init();
 
 function init() {
-  wheel.style.transform = `rotate(${state.currentRotation}deg)`;
+  renderWheelRotation();
   renderWinnerLog();
   bindGesture();
   bindAdmin();
@@ -121,7 +119,7 @@ function spinRoulette() {
   const deltaAngle = normalizeAngle(targetAngle - currentAngle);
 
   // 경계 넘지 않게 약하게 흔들림
-  const jitter = randomInt(-5, 5);
+  const jitter = getSafeStopJitter(prize);
 
   const nextRotation = state.currentRotation + fullSpins + deltaAngle + jitter;
 
@@ -136,12 +134,14 @@ function spinRoulette() {
     renderWinnerLog();
 
     resultPrize.textContent = prize.name;
-    resultModal.classList.remove("hidden");
 
     wheel.style.transition = "none";
-    wheel.style.transform = `rotate(${state.currentRotation}deg)`;
+    renderWheelRotation();
 
-    isSpinning = false;
+    setTimeout(() => {
+      resultModal.classList.remove("hidden");
+      isSpinning = false;
+    }, 500);
   }, 4300);
 }
 
@@ -196,7 +196,7 @@ function applyPrizeResult(prize) {
     prizeId: prize.id,
     prizeName: prize.name,
     rank: prize.rank,
-    time: new Date().toLocaleString("ko-KR")
+    time: formatLogTime(new Date())
   });
 
   state.logs = state.logs.slice(0, 100);
@@ -208,7 +208,7 @@ function renderWinnerLog() {
     .slice(0, 5);
 
   winnerLogList.innerHTML = winners.length
-    ? winners.map((log) => `<li>${log.time} - ${escapeHtml(log.prizeName)}</li>`).join("")
+    ? winners.map((log) => `<li>${escapeHtml(formatLogTimeValue(log.time))} / ${escapeHtml(formatRank(log.rank))}</li>`).join("")
     : `<li>아직 없음</li>`;
 }
 
@@ -256,34 +256,26 @@ function bindAdmin() {
     if (!confirm("전체 데이터를 초기화할까요?")) return;
     state = structuredClone(defaultState);
     saveState();
+    renderWheelRotation();
     renderWinnerLog();
     openAdmin();
   });
 }
 
+function renderWheelRotation() {
+  wheel.style.transform = `rotate(${state.currentRotation}deg)`;
+}
+
 function openAdmin() {
   pityEnabled.value = String(state.pity.enabled);
-  pityMaxFailCount.value = state.pity.maxFailCount;
-  pityGuaranteedRank.value = state.pity.guaranteedRank;
 
   prizeEditor.innerHTML = state.prizes
     .map(
       (p, index) => `
       <div class="prizeRow" data-index="${index}">
+        <div class="rankBadge">${escapeHtml(p.rank)}등</div>
         <label>상품명
           <input data-field="name" value="${escapeAttr(p.name)}" />
-        </label>
-        <label>등수
-          <input data-field="rank" type="number" value="${p.rank}" />
-        </label>
-        <label>확률 가중치
-          <input data-field="weight" type="number" value="${p.weight}" />
-        </label>
-        <label>재고
-          <input data-field="stock" type="number" value="${p.stock}" />
-        </label>
-        <label>룰렛 각도
-          <input data-field="angle" type="number" value="${p.angle}" />
         </label>
       </div>
     `
@@ -293,7 +285,7 @@ function openAdmin() {
   adminLog.innerHTML = state.logs.length
     ? state.logs
         .slice(0, 20)
-        .map((log) => `${log.time} - ${escapeHtml(log.prizeName)} / ${log.rank}등`)
+        .map((log) => `${escapeHtml(formatLogTimeValue(log.time))} / ${escapeHtml(formatRank(log.rank))}`)
         .join("<br>")
     : "로그 없음";
 
@@ -302,21 +294,13 @@ function openAdmin() {
 
 function saveAdminFromInputs() {
   state.pity.enabled = pityEnabled.value === "true";
-  state.pity.maxFailCount = Number(pityMaxFailCount.value);
-  state.pity.guaranteedRank = Number(pityGuaranteedRank.value);
 
   document.querySelectorAll(".prizeRow").forEach((row) => {
     const index = Number(row.dataset.index);
     const prize = state.prizes[index];
 
-    row.querySelectorAll("input").forEach((input) => {
-      const field = input.dataset.field;
-      if (field === "name") {
-        prize[field] = input.value;
-      } else {
-        prize[field] = Number(input.value);
-      }
-    });
+    const nameInput = row.querySelector('input[data-field="name"]');
+    prize.name = nameInput.value;
   });
 }
 
@@ -326,6 +310,54 @@ function randomInt(min, max) {
 
 function normalizeAngle(angle) {
   return ((angle % 360) + 360) % 360;
+}
+
+function formatLogTime(date) {
+  const month = date.getMonth() + 1;
+  const day = date.getDate();
+  const hours = String(date.getHours()).padStart(2, "0");
+  const minutes = String(date.getMinutes()).padStart(2, "0");
+
+  return `${month}월 ${day}일 ${hours}시 ${minutes}분`;
+}
+
+function formatLogTimeValue(value) {
+  const text = String(value).replace(" /", "");
+  const compactMatch = text.match(/^(\d{1,2})\/(\d{1,2})\s+(\d{1,2}):(\d{2})$/);
+
+  if (compactMatch) {
+    const [, month, day, hours, minutes] = compactMatch;
+    return `${Number(month)}월 ${Number(day)}일 ${hours.padStart(2, "0")}시 ${minutes}분`;
+  }
+
+  return text;
+}
+
+function formatRank(rank) {
+  return `${Number(rank)}등`;
+}
+
+function getSafeStopJitter(prize) {
+  const edgePadding = 10;
+  const angles = state.prizes
+    .map((p) => normalizeAngle(Number(p.angle)))
+    .sort((a, b) => a - b);
+  const prizeAngle = normalizeAngle(Number(prize.angle));
+  const index = angles.findIndex((angle) => angle === prizeAngle);
+
+  if (index === -1 || angles.length < 2) return 0;
+
+  const previousAngle = angles[(index - 1 + angles.length) % angles.length];
+  const nextAngle = angles[(index + 1) % angles.length];
+  const distanceToPrevious = normalizeAngle(prizeAngle - previousAngle);
+  const distanceToNext = normalizeAngle(nextAngle - prizeAngle);
+  const safeRange = Math.max(0, Math.min(distanceToPrevious, distanceToNext) / 2 - edgePadding);
+
+  return randomFloat(-safeRange, safeRange);
+}
+
+function randomFloat(min, max) {
+  return Math.random() * (max - min) + min;
 }
 
 

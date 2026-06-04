@@ -4,6 +4,18 @@
   user-select: none;
 }
 
+:root {
+  --cream: #fff8df;
+  --cream-soft: #fffdf4;
+  --pink: #ffd9df;
+  --pink-deep: #f47a8b;
+  --yellow: #fff58a;
+  --brown: #7a4a32;
+  --brown-deep: #4d2f22;
+  --line: rgba(122, 74, 50, 0.22);
+  --shadow: rgba(77, 47, 34, 0.18);
+}
+
 html,
 body {
   margin: 0;
@@ -11,7 +23,7 @@ body {
   height: 100%;
   overflow: hidden;
   background: #000;
-  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", sans-serif;
+  font-family: "Pretendard", "Pretendard Variable", system-ui, -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", sans-serif;
 }
 
 button,
@@ -86,36 +98,33 @@ select {
   left: 50%;
   bottom: 4vh;
   transform: translateX(-50%);
-  color: white;
+  color: var(--cream-soft);
   font-size: clamp(18px, 2vw, 34px);
-  text-shadow: 0 3px 10px rgba(0, 0, 0, 0.8);
+  text-shadow: 0 3px 10px rgba(77, 47, 34, 0.72);
 }
 
 #winnerLog {
   position: absolute;
   right: 3vw;
   top: 3vh;
-  width: 300px;
-  max-width: 32vw;
-  padding: 16px;
-  color: #fff;
-  background: rgba(0, 0, 0, 0.45);
-  border: 1px solid rgba(255, 255, 255, 0.25);
-  border-radius: 18px;
-  backdrop-filter: blur(8px);
+  width: 380px;
+  max-width: 38vw;
+  padding: 22px 24px;
+  color: var(--brown-deep);
+  background: rgba(255, 255, 255, 0.74);
+  border: 3px solid rgba(255, 248, 223, 0.92);
+  border-radius: 22px;
+  backdrop-filter: blur(10px);
+  box-shadow: 0 14px 34px rgba(77, 47, 34, 0.2);
   z-index: 3;
-}
-
-.logTitle {
-  font-weight: 800;
-  margin-bottom: 8px;
 }
 
 #winnerLogList {
   margin: 0;
-  padding-left: 18px;
-  font-size: 14px;
-  line-height: 1.5;
+  padding-left: 22px;
+  font-size: 17px;
+  line-height: 1.65;
+  font-weight: 700;
 }
 
 #adminHotspot {
@@ -133,21 +142,34 @@ select {
   z-index: 50;
   display: grid;
   place-items: center;
-  background: rgba(0, 0, 0, 0.72);
+  background: rgba(77, 47, 34, 0.48);
+  opacity: 1;
+  visibility: visible;
+  transition: opacity 0.35s ease, visibility 0.35s ease;
 }
 
 .hidden {
-  display: none;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
 }
 
 .modalBox {
   width: min(520px, 86vw);
   padding: 36px;
   text-align: center;
-  color: #fff;
-  background: rgba(20, 20, 20, 0.95);
-  border: 2px solid rgba(255, 255, 255, 0.24);
+  color: var(--brown-deep);
+  background: rgba(255, 253, 244, 0.96);
+  border: 3px solid rgba(244, 122, 139, 0.36);
   border-radius: 28px;
+  box-shadow: 0 18px 48px var(--shadow);
+  transform: translateY(0) scale(1);
+  transition: transform 0.35s ease, opacity 0.35s ease;
+}
+
+.hidden .modalBox {
+  opacity: 0;
+  transform: translateY(14px) scale(0.98);
 }
 
 .modalBox h1 {
@@ -159,6 +181,7 @@ select {
   margin: 0 0 28px;
   font-size: 32px;
   font-weight: 800;
+  color: var(--pink-deep);
 }
 
 .modalBox button,
@@ -166,24 +189,27 @@ select {
   padding: 12px 20px;
   border: 0;
   border-radius: 12px;
-  background: #fff;
-  color: #000;
+  background: var(--brown);
+  color: var(--cream-soft);
   font-weight: 800;
+  box-shadow: 0 8px 18px rgba(77, 47, 34, 0.18);
 }
 
 .adminBox {
   width: min(980px, 92vw);
   max-height: 88vh;
   overflow: auto;
-  padding: 24px;
-  color: #fff;
-  background: #151515;
+  padding: 40px;
+  color: var(--brown-deep);
+  background: rgba(255, 253, 244, 0.97);
+  border: 3px solid rgba(244, 122, 139, 0.32);
   border-radius: 24px;
+  box-shadow: 0 18px 48px var(--shadow);
 }
 
 .adminGrid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: minmax(180px, 1fr);
   gap: 14px;
   margin-bottom: 20px;
 }
@@ -199,25 +225,41 @@ select {
 .adminBox select {
   width: 100%;
   padding: 10px;
-  border: 0;
+  border: 2px solid var(--line);
   border-radius: 10px;
+  background: var(--cream-soft);
+  color: var(--brown-deep);
 }
 
 .prizeRow {
   display: grid;
-  grid-template-columns: 1.2fr 0.7fr 0.7fr 0.7fr 0.7fr;
+  grid-template-columns: 72px minmax(0, 1fr);
+  align-items: end;
   gap: 10px;
   margin-bottom: 10px;
   padding: 12px;
-  background: #242424;
+  background: rgba(255, 217, 223, 0.44);
+  border: 2px solid rgba(244, 122, 139, 0.24);
   border-radius: 14px;
+}
+
+.rankBadge {
+  display: grid;
+  place-items: center;
+  min-height: 41px;
+  border-radius: 10px;
+  background: var(--yellow);
+  color: var(--brown-deep);
+  font-size: 15px;
+  font-weight: 800;
 }
 
 #adminLog {
   max-height: 160px;
   overflow: auto;
   padding: 12px;
-  background: #242424;
+  background: rgba(255, 248, 223, 0.74);
+  border: 2px solid var(--line);
   border-radius: 14px;
   font-size: 13px;
   line-height: 1.5;
@@ -242,4 +284,18 @@ img {
 
 #rouletteArea:active {
   cursor: grabbing;
+}
+
+@media (max-width: 720px) {
+  #winnerLog {
+    right: 4vw;
+    top: 2vh;
+    width: min(360px, 88vw);
+    max-width: 88vw;
+    padding: 18px 20px;
+  }
+
+  #winnerLogList {
+    font-size: 15px;
+  }
 }
