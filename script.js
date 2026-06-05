@@ -1,6 +1,6 @@
 const STORAGE_KEY = "fair-roulette-state-v1";
 const PRIZE_RATE_TABLE = {
-  default: { 1: 0.2, 2: 4.8, 3: 15, 4: 35, 5: 45 },
+  default: { 1: 0.2, 2: 1.8, 3: 18, 4: 35, 5: 45 },
   afterRank5Once: { 1: 0.2, 2: 4.8, 3: 15, 4: 45, 5: 35 },
   afterRank5Twice: { 1: 0.2, 2: 4.8, 3: 35, 4: 60, 5: 0 },
   afterRank4Twice: { 1: 0.2, 2: 4.8, 3: 50, 4: 0, 5: 45 },
@@ -10,7 +10,7 @@ const PRIZE_RATE_TABLE = {
 const defaultState = {
   prizes: [
     { id: 1, name: "키링 1개 선택 + 씰스티커 4장 세트 + 모조지 세트", rank: 1, angle: -90 },
-    { id: 2, name: "키링 1개 선택 + 씰스티커 1장 선택", rank: 2, angle: -52.5 },
+    { id: 2, name: "씰스티커 3장 선택", rank: 2, angle: -52.5 },
     { id: 3, name: "씰스티커 1장 선택", rank: 3, angle: 2.5 },
     { id: 4, name: "모조지 세트", rank: 4, angle: 80 },
     { id: 5, name: "미니 씰스티커 랜덤 1장", rank: 5, angle: 190 }
