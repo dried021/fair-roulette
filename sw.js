@@ -1,4 +1,4 @@
-const CACHE_NAME = "fair-roulette-v18";
+const CACHE_NAME = "fair-roulette-v19";
 
 const FILES_TO_CACHE = [
   "./",
