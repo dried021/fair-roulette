@@ -1,19 +1,19 @@
 const STORAGE_KEY = "fair-roulette-state-v1";
 const PRIZE_RATE_TABLE = {
   default: { 1: 0.2, 2: 1.8, 3: 18, 4: 35, 5: 45 },
-  afterRank5Once: { 1: 0.2, 2: 4.8, 3: 15, 4: 45, 5: 35 },
-  afterRank5Twice: { 1: 0.2, 2: 4.8, 3: 35, 4: 60, 5: 0 },
-  afterRank4Twice: { 1: 0.2, 2: 4.8, 3: 50, 4: 0, 5: 45 },
+  afterRank5Once: { 1: 0.2, 2: 1.8, 3: 18, 4: 45, 5: 25 },
+  afterRank5Twice: { 1: 0.2, 2: 1.8, 3: 38, 4: 60, 5: 0 },
+  afterRank4Twice: { 1: 0.2, 2: 1.8, 3: 53, 4: 0, 5: 45 },
   testEqual: { 1: 20, 2: 20, 3: 20, 4: 20, 5: 20 }
 };
 
 const defaultState = {
   prizes: [
-    { id: 1, name: "키링 1개 선택 + 씰스티커 4장 세트 + 모조지 세트", rank: 1, angle: -90 },
-    { id: 2, name: "씰스티커 3장 선택", rank: 2, angle: -52.5 },
-    { id: 3, name: "씰스티커 1장 선택", rank: 3, angle: 2.5 },
-    { id: 4, name: "모조지 세트", rank: 4, angle: 80 },
-    { id: 5, name: "미니 씰스티커 랜덤 1장", rank: 5, angle: 190 }
+    { id: 1, name: "키링 2개 + 씰스티커 4장 + 모조지 세트", rank: 1, angle: -90 },
+    { id: 2, name: "키링 1개 + 씰스티커 2장", rank: 2, angle: -52.5 },
+    { id: 3, name: "씰스티커 2장 + 모조지 세트 + 푸딩 모조지", rank: 3, angle: 2.5 },
+    { id: 4, name: "씰스티커 1장 + 푸딩 모조지", rank: 4, angle: 80 },
+    { id: 5, name: "미니 씰스티커 + 모조지 세트", rank: 5, angle: 190 }
   ],
   pity: {
     enabled: true,
@@ -246,13 +246,11 @@ function applyPrizeResult(prize) {
 }
 
 function renderWinnerLog() {
-  const winners = state.logs
-    .filter((log) => Number(log.rank) <= 3)
-    .slice(0, 5);
+  const sortedPrizes = [...state.prizes].sort((a, b) => Number(a.rank) - Number(b.rank));
 
-  winnerLogList.innerHTML = winners.length
-    ? winners.map((log) => `<li>${escapeHtml(formatLogTimeValue(log.time))} / ${escapeHtml(formatRank(log.rank))}</li>`).join("")
-    : `<li>아직 없음</li>`;
+  winnerLogList.innerHTML = sortedPrizes
+    .map((p) => `<li>${escapeHtml(formatRank(p.rank))} : ${escapeHtml(p.name)}</li>`)
+    .join("");
 }
 
 closeResultBtn.addEventListener("click", () => {
